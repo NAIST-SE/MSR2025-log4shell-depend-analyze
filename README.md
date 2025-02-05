@@ -1,5 +1,23 @@
 # MSR2025-log4shell-depend-analyze
 
+This repository contains the replication package for our paper titled "TBD".
+
+## Publication Information
+
+TBD
+
+# Data Preparation
+
+Procedure for extracting data from the dataset for analysis is explained.
+
+## Environment Setup
+
+## Data Extraction
+
+# Analyze
+
+Procedure for analyzing research questions using the extracted data.
+
 ## Preparation
 
 1. Install [uv](https://docs.astral.sh/uv/getting-started/installation/).

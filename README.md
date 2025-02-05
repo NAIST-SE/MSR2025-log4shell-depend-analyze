@@ -12,6 +12,29 @@ Procedure for extracting data from the dataset for analysis is explained.
 
 ## Environment Setup
 
+Goblin dataset and Neo4j query operations on the dataset must be available for the environment setup.
+
+## Queries
+
+Execute the followiong queries sequentially to extract the data.
+
+* Assign the `Artifact_log4j` label to the Artifact of "log4j-core".
+
+```
+MATCH  (a:Artifact)
+WHERE  a.id = "org.apache.logging.log4j:log4j-core"
+SET    a:Artifact_log4j
+RETURN a
+```
+
+* Assign the `Release_log4j` label to the Releases of "log4j-core"
+
+```
+MATCH  (:Artifact_log4j) - [:relationship_AR] -> (r:Release)
+SET    r:Release_log4j
+RETURN r
+```
+
 ## Data Extraction
 
 # Analyze

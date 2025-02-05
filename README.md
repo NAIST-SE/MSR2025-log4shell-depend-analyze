@@ -85,8 +85,14 @@ MATCH (r:Release_depend_SemVer) - [d:dependency] -> (a:Artifact_log4j)
 CREATE (r) - [:dependency_to_log4j_SemVer] -> (a)
 RETURN COUNT(DISTINCT d)  // -> 415560
 ```
-  
-## Data Extraction
+
+* Execute the following query and extract the data necessary for analysis. Save outputs as `result_all.json` .
+
+```
+MATCH  (l:Release_depend_SemVer) - [d:dependency_to_log4j_SemVer] -> (a:Artifact_log4j) - [:relationship_AR] -> (r:Release_log4j_SemVer)
+WHERE  d.targetVersion = r.version
+RETURN r.timestamp AS rt, r.version AS rv, l.timestamp AS lt, l.version AS lv
+```
 
 # Analyze
 

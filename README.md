@@ -18,23 +18,74 @@ Goblin dataset and Neo4j query operations on the dataset must be available for t
 
 Execute the followiong queries sequentially to extract the data.
 
-* Assign the `Artifact_log4j` label to the Artifact of "log4j-core".
+* Assign the `Artifact_log4j` label to the *Artifact* of "log4j-core".
 
 ```
 MATCH  (a:Artifact)
 WHERE  a.id = "org.apache.logging.log4j:log4j-core"
 SET    a:Artifact_log4j
-RETURN a
+RETURN COUNT(a)  // -> 1
 ```
 
-* Assign the `Release_log4j` label to the Releases of "log4j-core"
+* Assign the `Release_log4j` label to the *Release*s of "log4j-core"
 
 ```
 MATCH  (:Artifact_log4j) - [:relationship_AR] -> (r:Release)
 SET    r:Release_log4j
-RETURN r
+RETURN COUNT(r)  // -> 65
 ```
 
+* Assign the `Release_depend` label to the *Release*s that depend on "log4j-core"
+
+```
+MATCH  (r:Release) - [:dependency] -> (a:Artifact_log4j)
+SET    r:Release_depend
+RETURN COUNT(DISTINCT r)  // -> 521214
+```
+
+* Assign the `Artifact_depend` label to the *Artifact*s that depend on "log4j-core"
+
+```
+MATCH  (a:Artifact) - [:relationship_AR] -> (:Release_depend)
+SET    a:Artifact_depend 
+RETURN COUNT(DISTINCT a)  // -> 14471
+```
+
+* Assign the `Release_log4j_SemVer` label to the *Release*s that have the `Release_log4j` label and follow semantic versioning.
+
+```
+MATCH  (r:Release_log4j)
+WHERE  r.version =~ '^\\d+\\.\\d+\\.\\d+$'
+SET    r:Release_log4j_SemVer
+RETURN COUNT(r)  // -> 40
+```
+
+* Assign the `Release_depend_SemVer` label to the *Release*s that follow semantic versioning and whose dependent log4j package versions also follow semantic versioning.
+
+```
+MATCH  (r:Release_depend) - [d:dependency] -> (a:Artifact_log4j)
+WHERE  r.version =~ '^\\d+\\.\\d+\\.\\d+$'
+AND    d.targetVersion =~ '^\\d+\\.\\d+\\.\\d+$'
+SET    r:Release_depend_SemVer
+RETURN COUNT(DISTINCT r)  // -> 402232
+```
+
+* Create the `dependency_to_log4j` relationship from `Release_depend` to `Artifact_log4j`
+
+```
+MATCH  (r:Release_depend) - [d:dependency] -> (a:Artifact_log4j)
+CREATE (r) - [:dependency_to_log4j] -> (a)
+RETURN COUNT(DISTINCT d)  // -> 522401
+```
+
+* Create the `dependency_to_log4j_SemVer` relationship from `Release_depend_SemVer` to `Artifact_log4j`
+
+```
+MATCH (r:Release_depend_SemVer) - [d:dependency] -> (a:Artifact_log4j)
+CREATE (r) - [:dependency_to_log4j_SemVer] -> (a)
+RETURN COUNT(DISTINCT d)  // -> 415560
+```
+  
 ## Data Extraction
 
 # Analyze

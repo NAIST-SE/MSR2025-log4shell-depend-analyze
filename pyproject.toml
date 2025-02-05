@@ -1,0 +1,25 @@
+[project]
+name = "MSR2025"
+version = "0.1.0"
+description = "MSR2025"
+readme = "README.md"
+authors = [
+    { name = "take0x" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "matplotlib>=3.9.3",
+]
+
+[project.scripts]
+generate = "msr2025.generate_data:main"
+rq1 = "msr2025.rq1:main"
+rq2_1 = "msr2025.rq2_1:main"
+rq2_2 = "msr2025.rq2_2:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/msr2025"]

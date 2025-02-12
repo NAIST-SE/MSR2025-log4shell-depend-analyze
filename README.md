@@ -94,7 +94,7 @@ WHERE  d.targetVersion = r.version
 RETURN r.timestamp AS rt, r.version AS rv, l.timestamp AS lt, l.version AS lv
 ```
 
-# Analyze
+# How to Analyze?
 
 Procedure for analyzing research questions using the extracted data.
 

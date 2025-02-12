@@ -1,10 +1,10 @@
 # MSR2025-log4shell-depend-analyze
 
-This repository contains the replication package for our paper titled "" (TBD).
+This repository contains the replication package for our paper which has been accepted for the Mining Challenge Track at the 22nd International Conference on Mining Software Repositories (MSR 2025).
 
-## Publication Information
+Title: Mining for Lags in Updating Critical Security Threats: A Case Study of Log4j Library
 
-TBD
+Authors: Hidetake Tanaka, Kazuma Yamasaki, Momoka Hirose, Takashi Nakano, Youmei Fan, Kazumasa Shimari, Raula Gaikovina Kula, Kenichi Matsumoto
 
 # Data Preparation
 

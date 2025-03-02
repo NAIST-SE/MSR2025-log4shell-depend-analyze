@@ -70,11 +70,11 @@ SET    r:Release_depend_SemVer
 RETURN COUNT(DISTINCT r)  // -> 402232
 ```
 
-* Create the `dependency_to_log4j` relationship from `Release_depend` to `Artifact_log4j`
+*  the `dependency_to_log4j` relationship from `Release_depend` to `Artifact_log4j`
 
 ```
 MATCH  (r:Release_depend) - [d:dependency] -> (a:Artifact_log4j)
-CREATE (r) - [:dependency_to_log4j] -> (a)
+CREATE (r) - [:dependency_to_log4j {targetVersion: d.targetVersion}] -> (a)
 RETURN COUNT(DISTINCT d)  // -> 522401
 ```
 
@@ -82,7 +82,7 @@ RETURN COUNT(DISTINCT d)  // -> 522401
 
 ```
 MATCH (r:Release_depend_SemVer) - [d:dependency] -> (a:Artifact_log4j)
-CREATE (r) - [:dependency_to_log4j_SemVer] -> (a)
+CREATE (r) - [:dependency_to_log4j_SemVer {targetVersion: d.targetVersion}] -> (a)
 RETURN COUNT(DISTINCT d)  // -> 415560
 ```
 

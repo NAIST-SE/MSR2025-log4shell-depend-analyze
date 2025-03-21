@@ -114,10 +114,10 @@ def main():
                   split(r.version, ').') AS parts \
                 WITH \
                   r.artifactId AS artifactId, \
-                  r.version AS lv, \
-                  r.timestamp AS lt, \
-                  r.targetVersion AS rv, \
-                  r.targetTimestamp AS rt, \
+                  r.version AS rv, \
+                  r.timestamp AS rt, \
+                  r.targetVersion AS lv, \
+                  r.targetTimestamp AS lt, \
                   toInteger(parts[0]) AS major, \
                   toInteger(parts[1]) AS minor, \
                   toInteger(parts[2]) AS patch \

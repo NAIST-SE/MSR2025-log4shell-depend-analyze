@@ -10,36 +10,26 @@ class Release(TypedDict):
     lv: str  # dependency release version
 
 
-class Data(TypedDict):
-    row: tuple[str, list[Release]]
+type Result = list[str | list[Release]]
 
 
-class Result(TypedDict):
-    columns: list[str]
-    data: list[Data]
-
-
-class Source(TypedDict):
-    results: list[Result]
+type Source = list[Result]
 
 
 LOG4J_TIMESTAMP_2_17_0 = 1639792690000
 
 
 def main() -> None:
-    source_path = Path("result_all.json")
+    source_path = Path("./output/result.json")
 
     with source_path.open() as f:
         results: Source = json.load(f)
 
-    data_list = results["results"][0]["data"]
-
     output_list: list[dict] = []
 
-    for data in data_list:
-        row = data["row"]
-        artifact_id = row[0]
-        releases = row[1]
+    for data in results:
+        artifact_id: str = data[0]
+        releases: list[Release] = data[1]
 
         old_releases = [r for r in releases if r["lt"] < LOG4J_TIMESTAMP_2_17_0]
         new_releases = [r for r in releases if r["lt"] >= LOG4J_TIMESTAMP_2_17_0]

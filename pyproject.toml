@@ -8,14 +8,17 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "dotenv>=0.9.9",
     "matplotlib>=3.9.3",
+    "requests>=2.32.3",
 ]
 
 [project.scripts]
-generate = "msr2025.B-Empirical_Study.generate_data:main"
-rq1 = "msr2025.B-Empirical_Study.rq1:main"
-rq2_1 = "msr2025.B-Empirical_Study.rq2_1:main"
-rq2_2 = "msr2025.B-Empirical_Study.rq2_2:main"
+data_preparation_and_extraction = "msr2025.A_Data_Preparation_and_Extraction.main:main"
+generate = "msr2025.B_Empirical_Study.generate_data:main"
+rq1 = "msr2025.B_Empirical_Study.rq1:main"
+rq2_1 = "msr2025.B_Empirical_Study.rq2_1:main"
+rq2_2 = "msr2025.B_Empirical_Study.rq2_2:main"
 
 [build-system]
 requires = ["hatchling"]

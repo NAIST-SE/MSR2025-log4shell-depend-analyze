@@ -12,10 +12,10 @@ dependencies = [
 ]
 
 [project.scripts]
-generate = "msr2025.generate_data:main"
-rq1 = "msr2025.rq1:main"
-rq2_1 = "msr2025.rq2_1:main"
-rq2_2 = "msr2025.rq2_2:main"
+generate = "msr2025.B-Empirical_Study.generate_data:main"
+rq1 = "msr2025.B-Empirical_Study.rq1:main"
+rq2_1 = "msr2025.B-Empirical_Study.rq2_1:main"
+rq2_2 = "msr2025.B-Empirical_Study.rq2_2:main"
 
 [build-system]
 requires = ["hatchling"]

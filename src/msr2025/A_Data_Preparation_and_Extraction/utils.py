@@ -1,3 +1,4 @@
+import json
 import os
 from typing import Optional
 from urllib.parse import urljoin
@@ -69,3 +70,36 @@ def run_task(label: str, task):
     finally:
         done_event.set()
         spinner_thread.join()
+
+
+def save_json(data, path):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, 'w') as f:
+        json.dump(data, f)
+
+
+def save_result():
+    query: str = "\
+        MATCH (r:Release_depend_SemVer) \
+        WITH \
+          r, \
+          split(r.version, ').') AS parts \
+        WITH \
+          r.artifactId AS artifactId, \
+          r.version AS lv, \
+          r.timestamp AS lt, \
+          r.targetVersion AS rv, \
+          r.targetTimestamp AS rt, \
+          toInteger(parts[0]) AS major, \
+          toInteger(parts[1]) AS minor, \
+          toInteger(parts[2]) AS patch \
+        ORDER BY artifactId, major, minor, patch \
+        WITH artifactId, lv, lt, rv, rt \
+        RETURN artifactId, collect({lv: lv, lt: lt, rv: rv, rt: rt}) as versions"
+
+    result: dict =  call_api(path='/cypher', params={
+        'query': query,
+        'addedValues': []
+    })
+
+    save_json(result, 'output/result_all.json')

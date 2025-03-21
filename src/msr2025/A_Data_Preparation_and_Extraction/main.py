@@ -1,4 +1,4 @@
-from .utils import run_cypher, run_task
+from .utils import run_cypher, run_task, save_result
 
 SEMVER_REGEX = "'^\\\\d+\\\\.\\\\d+\\\\.\\\\d+$'"
 
@@ -61,6 +61,37 @@ def main():
             clause_set='r:Release_depend_SemVer'
         )
     )
+
+    # Assign the 'artifactId' property to 'Release_depend_SemVer' nodes
+    run_task(
+        label="Assign the 'artifactId' property to 'Release_depend_SemVer' nodes",
+        task=lambda: run_cypher(
+            clause_match='(a:Artifact_depend) - [d:relationship_AR] -> (r:Release_depend_SemVer)',
+            clause_set='r.artifactId = a.id'
+        )
+    )
+
+    # Assign the 'targetVersion' property to 'Release_depend_SemVer' nodes
+    run_task(
+        label="Assign the 'targetVersion' property to 'Release_depend_SemVer' nodes",
+        task=lambda: run_cypher(
+            clause_match='(r:Release_depend_SemVer) - [d:dependency] -> (a:Artifact_log4j)',
+            clause_set='r.targetVersion = d.targetVersion'
+        )
+    )
+
+    # Assign the 'targetTimestamp' property to 'Release_depend_SemVer' nodes
+    run_task(
+        label="Assign the 'targetTimestamp' property to 'Release_depend_SemVer' nodes",
+        task=lambda: run_cypher(
+            clause_match='(rd:Release_depend_SemVer) - [:dependency] -> (:Artifact_log4j) - [:relationship_AR] -> (rl:Release_log4j_SemVer)',
+            clause_where='rd.targetVersion = rl.version',
+            clause_set='rd.targetTimestamp = rl.timestamp'
+        )
+    )
+
+    # Save Result
+    run_task(label="Save Result", task=save_result)
 
 
 if __name__ == '__main__':

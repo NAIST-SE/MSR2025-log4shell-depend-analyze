@@ -5,6 +5,7 @@ from .neo4jclient import Neo4jClient
 from dotenv import load_dotenv
 
 SEMVER_REGEX = "'^\\\\d+\\\\.\\\\d+\\\\.\\\\d+$'"
+SAVE_FILE_PATH = "./output/A_Data_Preparation_and_Extraction/extracted_data.json"
 
 
 def main():
@@ -102,9 +103,9 @@ def main():
         ),
     )
 
-    # Save Result
+    # Extract Data & Save Result
     run_task(
-        label="Save Result",
+        label="Extract Data & Save Result",
         task=lambda: client.extract_data(
             query="\
                 MATCH (r:Release_depend_SemVer) \
@@ -123,11 +124,13 @@ def main():
                 ORDER BY artifactId, major, minor, patch \
                 WITH artifactId, collect({lv:lv, lt:lt, rv:rv, rt:rt}) as version \
                 RETURN artifactId, version",
-            path="./output/result.json",
+            path=SAVE_FILE_PATH,
         ),
     )
 
     client.close()
+
+    print(f"Extracted data has been saved to: '{SAVE_FILE_PATH}'")
 
 
 if __name__ == "__main__":

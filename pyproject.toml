@@ -15,9 +15,9 @@ dependencies = [
 ]
 
 [project.scripts]
-data_preparation_and_extraction = "msr2025.A_Data_Preparation_and_Extraction.main:main"
-generate = "msr2025.B_Empirical_Study.generate_data:main"
-rq1 = "msr2025.B_Empirical_Study.rq1:main"
+data_extraction  = "msr2025.A_Data_Preparation_and_Extraction.data_extraction:main"
+data_preparation = "msr2025.A_Data_Preparation_and_Extraction.data_preparation:main"
+rq1   = "msr2025.B_Empirical_Study.rq1:main"
 rq2_1 = "msr2025.B_Empirical_Study.rq2_1:main"
 rq2_2 = "msr2025.B_Empirical_Study.rq2_2:main"
 

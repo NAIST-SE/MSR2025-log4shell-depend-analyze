@@ -17,7 +17,7 @@ dependencies = [
 
 [project.scripts]
 all = "msr2025:main"
-data_extraction_and_preparation = "msr2025.A_Data_Preparation_and_Extraction:main"
+data_preparation_and_extraction = "msr2025.A_Data_Preparation_and_Extraction:main"
 data_extraction  = "msr2025.A_Data_Preparation_and_Extraction.data_extraction:main"
 data_preparation = "msr2025.A_Data_Preparation_and_Extraction.data_preparation:main"
 empirical_study = "msr2025.B_Empirical_Study:main"

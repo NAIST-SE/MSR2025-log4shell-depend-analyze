@@ -1,4 +1,3 @@
-import json
 import os
 
 from .utils import run_task
@@ -104,7 +103,6 @@ def main():
     )
 
     # Save Result
-    result = {}
     run_task(
         label="Save Result",
         task=lambda: client.extract_data(

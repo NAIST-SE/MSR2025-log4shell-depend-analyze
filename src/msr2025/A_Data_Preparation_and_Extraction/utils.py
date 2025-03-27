@@ -4,7 +4,6 @@ import itertools
 import threading
 import time
 import sys
-from neo4j import GraphDatabase
 
 
 def spinner(label: str, done_event: threading.Event):

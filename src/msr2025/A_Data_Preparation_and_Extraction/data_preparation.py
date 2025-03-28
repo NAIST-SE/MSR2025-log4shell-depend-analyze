@@ -1,14 +1,31 @@
+"""
+src/msr2025/A_Data_Preparation_and_Extraction/data_preparation.py
+
+This script performs data preparation and extraction on a Neo4j graph database
+related to the 'log4j-core' artifact. It assigns various labels and properties
+to nodes and relationships based on semantic versioning and dependency structure,
+and finally exports structured data to a JSON file.
+"""
+
 from pathlib import Path
 
 from .lib.env import get_neo4j_envs
 from ..lib.tasks import run_task
 from .lib.neo4jclient import Neo4jClient
 
+# Regular expression to match semantic versioning (e.g., 1.2.3)
 SEMVER_REGEX = "'^\\\\d+\\\\.\\\\d+\\\\.\\\\d+$'"
+
+# Output path for extracted data
 SAVE_FILE_PATH = Path("./output/A_Data_Preparation_and_Extraction/data_releases.json")
 
 
 def main():
+    """
+    Entry point of the script. Connects to the Neo4j database, processes and labels
+    release and artifact nodes related to 'log4j-core', and extracts structured data.
+    """
+
     # Setup Neo4j Client
     uri, username, password = get_neo4j_envs()
 
@@ -125,6 +142,7 @@ def main():
             ),
         )
 
+        # Output confirmation
         print(f"Release datas has been saved to: '{SAVE_FILE_PATH}'")
 
 

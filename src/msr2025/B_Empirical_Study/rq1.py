@@ -1,8 +1,9 @@
-import json
 from pathlib import Path
 from typing import TypedDict
 
 import matplotlib.pyplot as plt
+
+from ..lib import load_json
 
 
 class Data(TypedDict):
@@ -18,14 +19,18 @@ class Data(TypedDict):
 
 ONE_DAY = 24 * 60 * 60 * 1000
 
+SOURCE_FILE_PATH = Path("output/A_Data_Preparation_and_Extraction/data_updates.json")
+
 
 def main() -> None:
     plt.clf()
 
-    source_path = Path("output/A_Data_Preparation_and_Extraction/data_updates.json")
-
-    with source_path.open() as f:
-        results: list[Data] = json.load(f)
+    try:
+        results: list[Data] = load_json(SOURCE_FILE_PATH)
+    except FileNotFoundError:
+        raise FileNotFoundError(
+            f"File '{SOURCE_FILE_PATH}' not found.\nYou must run 'uv run data_preparation_and_extraction' first."
+        )
 
     # Create a histogram of the gaps
     gaps = [r["gap"] / ONE_DAY for r in results]

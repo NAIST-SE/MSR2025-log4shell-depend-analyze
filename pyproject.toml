@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "MSR2025"
 readme = "README.md"
 authors = [
-    { name = "take0x" },
+    { name = "take0x", email = "tanaka.hidetake.te0@naist.ac.jp" },
     { name = "Hietan", email = "yamasaki.kazuma.yj9@naist.ac.jp" }
 ]
 requires-python = ">=3.12"

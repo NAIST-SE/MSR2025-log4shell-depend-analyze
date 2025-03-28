@@ -111,15 +111,15 @@ def main():
                       split(r.version, ').') AS parts \
                     WITH \
                       r.artifactId AS artifactId, \
-                      r.version AS rv, \
-                      r.timestamp AS rt, \
-                      r.targetVersion AS lv, \
-                      r.targetTimestamp AS lt, \
+                      r.version AS dependent_version, \
+                      r.timestamp AS dependent_time, \
+                      r.targetVersion AS log4j_version, \
+                      r.targetTimestamp AS log4j_time, \
                       toInteger(parts[0]) AS major, \
                       toInteger(parts[1]) AS minor, \
                       toInteger(parts[2]) AS patch \
                     ORDER BY artifactId, major, minor, patch \
-                    WITH artifactId, collect({lv:lv, lt:lt, rv:rv, rt:rt}) as version \
+                    WITH artifactId, collect({log4j_time:log4j_time, log4j_version:log4j_version, dependent_time:dependent_time, dependent_version:dependent_version}) as version \
                     RETURN artifactId, version",
                 path=SAVE_FILE_PATH,
             ),

@@ -1,12 +1,21 @@
+from __future__ import annotations
+
+from pathlib import Path
 from typing import List, Dict, Any, Optional
 
 from neo4j import GraphDatabase
-from .utils import save_json
+from ..lib.files import save_json
 
 
 class Neo4jClient:
     def __init__(self, uri: str, user: str, password: str):
         self.driver = GraphDatabase.driver(uri, auth=(user, password))
+
+    def __enter__(self) -> Neo4jClient:
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        self.close()
 
     def close(self):
         self.driver.close()
@@ -35,6 +44,6 @@ class Neo4jClient:
         query: str = " ".join(f"{k} {v}" for k, v in queries.items() if v is not None)
         return self.run_query(query)
 
-    def extract_data(self, query: str, path: str) -> None:
+    def extract_data(self, query: str, path: Path) -> None:
         result = self.run_query(query)
         save_json([record for record in result], path)

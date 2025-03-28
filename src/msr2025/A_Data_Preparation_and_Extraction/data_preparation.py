@@ -1,70 +1,132 @@
-import json
+import os
 from pathlib import Path
-from typing import TypedDict
+
+from src.msr2025.A_Data_Preparation_and_Extraction.lib.env import get_neo4j_envs
+from src.msr2025.lib.tasks import run_task
+from .neo4jclient import Neo4jClient
+
+SEMVER_REGEX = "'^\\\\d+\\\\.\\\\d+\\\\.\\\\d+$'"
+SAVE_FILE_PATH = Path("./output/A_Data_Preparation_and_Extraction/data_releases.json")
 
 
-class Release(TypedDict):
-    rt: int  # release time
-    rv: str  # release version
-    lt: int  # dependency release time
-    lv: str  # dependency release version
+def main():
+    # Setup Neo4j Client
+    uri, username, password = get_neo4j_envs()
 
+    with Neo4jClient(uri, username, password) as client:
+        # Assign the 'Artifact_log4j' label to the Artifact of 'log4j-core'
+        run_task(
+            label="Assign the 'Artifact_log4j' label to the Artifact of 'log4j-core'",
+            task=lambda: client.run_query_with_clauses(
+                clause_match="(a:Artifact)",
+                clause_where='a.id="org.apache.logging.log4j:log4j-core"',
+                clause_set="a:Artifact_log4j",
+            ),
+        )
 
-type Result = list[str | list[Release]]
+        # Assign the 'Release_log4j' label to the Releases of 'log4j-core'
+        run_task(
+            label="Assign the 'Release_log4j' label to the Releases of 'log4j-core'",
+            task=lambda: client.run_query_with_clauses(
+                clause_match="(:Artifact_log4j) - [:relationship_AR] -> (r:Release)",
+                clause_set="r:Release_log4j",
+            ),
+        )
 
+        # Assign the 'Release_depend' label to the Releases that depend on 'log4j-core'
+        run_task(
+            label="Assign the 'Release_depend' label to the Releases that depend on 'log4j-core'",
+            task=lambda: client.run_query_with_clauses(
+                clause_match="(r:Release) - [:dependency] -> (a:Artifact_log4j)",
+                clause_set="r:Release_depend",
+            ),
+        )
 
-type Source = list[Result]
+        # Assign the 'Artifact_depend' label to the Artifacts that depend on 'log4j-core'
+        run_task(
+            label="Assign the 'Artifact_depend' label to the Artifacts that depend on 'log4j-core'",
+            task=lambda: client.run_query_with_clauses(
+                clause_match="(a:Artifact) - [:relationship_AR] -> (:Release_depend)",
+                clause_set="a:Artifact_depend",
+            ),
+        )
 
+        # Assign the 'Release_log4j_SemVer' label to the Releases
+        # that have the 'Release_log4j' label and follow semantic versioning.
+        run_task(
+            label="Assign the 'Release_log4j_SemVer' label to the Releases that have the 'Release_log4j' label and follow semantic versioning",
+            task=lambda: client.run_query_with_clauses(
+                clause_match="(r:Release_log4j)",
+                clause_where=f"r.version =~ {SEMVER_REGEX}",
+                clause_set="r:Release_log4j_SemVer",
+            ),
+        )
 
-LOG4J_TIMESTAMP_2_17_0 = 1639792690000
+        # Assign the 'Release_depend_SemVer' label to the Releases
+        # that follow semantic versioning and whose dependent log4j package versions also follow semantic versioning.
+        run_task(
+            label="Assign the 'Release_depend_SemVer' label to the Releases that follow semantic versioning and whose dependent log4j package versions also follow semantic versioning",
+            task=lambda: client.run_query_with_clauses(
+                clause_match="(r:Release_depend) - [d:dependency] -> (a:Artifact_log4j)",
+                clause_where=f"r.version =~ {SEMVER_REGEX} AND d.targetVersion =~ {SEMVER_REGEX}",
+                clause_set="r:Release_depend_SemVer",
+            ),
+        )
 
+        # Assign the 'artifactId' property to 'Release_depend_SemVer' nodes
+        run_task(
+            label="Assign the 'artifactId' property to 'Release_depend_SemVer' nodes",
+            task=lambda: client.run_query_with_clauses(
+                clause_match="(a:Artifact_depend) - [d:relationship_AR] -> (r:Release_depend_SemVer)",
+                clause_set="r.artifactId = a.id",
+            ),
+        )
 
-def main() -> None:
-    source_path = Path("./output/result.json")
+        # Assign the 'targetVersion' property to 'Release_depend_SemVer' nodes
+        run_task(
+            label="Assign the 'targetVersion' property to 'Release_depend_SemVer' nodes",
+            task=lambda: client.run_query_with_clauses(
+                clause_match="(r:Release_depend_SemVer) - [d:dependency] -> (a:Artifact_log4j)",
+                clause_set="r.targetVersion = d.targetVersion",
+            ),
+        )
 
-    with source_path.open() as f:
-        results: Source = json.load(f)
+        # Assign the 'targetTimestamp' property to 'Release_depend_SemVer' nodes
+        run_task(
+            label="Assign the 'targetTimestamp' property to 'Release_depend_SemVer' nodes",
+            task=lambda: client.run_query_with_clauses(
+                clause_match="(rd:Release_depend_SemVer) - [:dependency] -> (:Artifact_log4j) - [:relationship_AR] -> (rl:Release_log4j_SemVer)",
+                clause_where="rd.targetVersion = rl.version",
+                clause_set="rd.targetTimestamp = rl.timestamp",
+            ),
+        )
 
-    output_list: list[dict] = []
+        # Extract Data & Save Result
+        run_task(
+            label="Extract Data & Save Result",
+            task=lambda: client.extract_data(
+                query="\
+                    MATCH (r:Release_depend_SemVer) \
+                    WITH \
+                      r, \
+                      split(r.version, ').') AS parts \
+                    WITH \
+                      r.artifactId AS artifactId, \
+                      r.version AS rv, \
+                      r.timestamp AS rt, \
+                      r.targetVersion AS lv, \
+                      r.targetTimestamp AS lt, \
+                      toInteger(parts[0]) AS major, \
+                      toInteger(parts[1]) AS minor, \
+                      toInteger(parts[2]) AS patch \
+                    ORDER BY artifactId, major, minor, patch \
+                    WITH artifactId, collect({lv:lv, lt:lt, rv:rv, rt:rt}) as version \
+                    RETURN artifactId, version",
+                path=SAVE_FILE_PATH,
+            ),
+        )
 
-    for data in results:
-        artifact_id: str = data[0]
-        releases: list[Release] = data[1]
-
-        old_releases = [r for r in releases if r["lt"] < LOG4J_TIMESTAMP_2_17_0]
-        new_releases = [r for r in releases if r["lt"] >= LOG4J_TIMESTAMP_2_17_0]
-
-        if not old_releases or not new_releases:
-            continue
-
-        previous_release = max(old_releases, key=lambda d: d["rt"])
-        next_release = min(new_releases, key=lambda d: d["rt"])
-
-        earliest_release = min(releases, key=lambda d: d["rt"])
-        latest_release = max(releases, key=lambda d: d["rt"])
-
-        total_release_timestamp_diff = latest_release["rt"] - earliest_release["rt"]
-
-        release_frequency = total_release_timestamp_diff / (len(releases) - 1)
-
-        output = {
-            "artifact_id": artifact_id,
-            "old_version": previous_release["rv"],
-            "old_time": previous_release["rt"],
-            "old_depend_version": previous_release["lv"],
-            "new_version": next_release["rv"],
-            "new_time": next_release["rt"],
-            "new_depend_version": next_release["lv"],
-            "gap": next_release["rt"] - LOG4J_TIMESTAMP_2_17_0,
-            "release_frequency": release_frequency,
-        }
-
-        output_list.append(output)
-
-    output_path = Path("data.json")
-
-    with output_path.open("w") as f:
-        json.dump(output_list, f, indent=2)
+        print(f"Extracted data has been saved to: '{SAVE_FILE_PATH}'")
 
 
 if __name__ == "__main__":

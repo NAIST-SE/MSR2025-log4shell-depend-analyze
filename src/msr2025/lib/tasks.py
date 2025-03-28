@@ -1,5 +1,3 @@
-import json
-import os
 import itertools
 import threading
 import time
@@ -27,9 +25,3 @@ def run_task(label: str, task):
     finally:
         done_event.set()
         spinner_thread.join()
-
-
-def save_json(data, path):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w") as f:
-        json.dump(data, f, indent=2)

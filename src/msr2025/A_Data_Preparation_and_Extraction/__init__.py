@@ -2,7 +2,6 @@ from . import data_preparation, data_extraction
 
 
 def main():
-
     print("\n**** Data Preparation ****")
     data_preparation.main()
 

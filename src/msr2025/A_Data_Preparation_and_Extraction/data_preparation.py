@@ -1,9 +1,8 @@
-import os
 from pathlib import Path
 
-from src.msr2025.A_Data_Preparation_and_Extraction.lib.env import get_neo4j_envs
-from src.msr2025.lib.tasks import run_task
-from .neo4jclient import Neo4jClient
+from .lib.env import get_neo4j_envs
+from ..lib.tasks import run_task
+from .lib.neo4jclient import Neo4jClient
 
 SEMVER_REGEX = "'^\\\\d+\\\\.\\\\d+\\\\.\\\\d+$'"
 SAVE_FILE_PATH = Path("./output/A_Data_Preparation_and_Extraction/data_releases.json")
@@ -126,7 +125,7 @@ def main():
             ),
         )
 
-        print(f"Extracted data has been saved to: '{SAVE_FILE_PATH}'")
+        print(f"Release datas has been saved to: '{SAVE_FILE_PATH}'")
 
 
 if __name__ == "__main__":

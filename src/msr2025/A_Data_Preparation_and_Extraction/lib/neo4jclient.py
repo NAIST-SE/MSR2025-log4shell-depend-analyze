@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional
 
 from neo4j import GraphDatabase
-from ..lib.files import save_json
+from ...lib.files import save_json
 
 
 class Neo4jClient:

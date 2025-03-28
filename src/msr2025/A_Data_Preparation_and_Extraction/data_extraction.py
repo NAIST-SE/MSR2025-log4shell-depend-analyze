@@ -23,7 +23,6 @@ SAVE_FILE_PATH = Path("./output/A_Data_Preparation_and_Extraction/data_updates.j
 
 
 def main() -> None:
-
     with SOURCE_FILE_PATH.open() as f:
         results: Source = json.load(f)
 
@@ -64,7 +63,7 @@ def main() -> None:
         output_list.append(output)
 
     save_json(output_list, SAVE_FILE_PATH)
-    print(f"Extracted data has been saved to: '{SAVE_FILE_PATH}'")
+    print(f"Update datas has been saved to: '{SAVE_FILE_PATH}'")
 
 
 if __name__ == "__main__":

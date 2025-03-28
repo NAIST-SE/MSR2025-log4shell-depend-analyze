@@ -1,8 +1,9 @@
 [project]
 name = "MSR2025"
 version = "0.1.0"
-description = "MSR2025"
+description = "A research project for the MSR 2025 Mining Challenge, focusing on the analysis of log4j-core dependency updates using Neo4j and empirical software engineering techniques."
 readme = "README.md"
+license = { file = "LICENSE" }
 authors = [
     { name = "take0x", email = "tanaka.hidetake.te0@naist.ac.jp" },
     { name = "Hietan", email = "yamasaki.kazuma.yj9@naist.ac.jp" }
@@ -24,6 +25,8 @@ empirical_study = "msr2025.B_Empirical_Study:main"
 rq1   = "msr2025.B_Empirical_Study.rq1:main"
 rq2_1 = "msr2025.B_Empirical_Study.rq2_1:main"
 rq2_2 = "msr2025.B_Empirical_Study.rq2_2:main"
+
+
 
 [build-system]
 requires = ["hatchling"]

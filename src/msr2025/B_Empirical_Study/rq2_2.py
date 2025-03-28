@@ -1,37 +1,27 @@
-from pathlib import Path
-from typing import TypedDict
+"""
+src/msr2025/B_Empirical_Study/rq2_2.py
+
+RQ2-2: To what extent do response times to critical CVEs vary across major, minor, and patch versions?
+
+This script:
+- Classifies updates into major, minor, and patch version changes.
+- Draws box plots of update delays for each category (with and without outliers).
+- Computes and prints the median delay for each type of version update.
+"""
 
 import matplotlib.pyplot as plt
 
-from ..lib import load_json
-
-
-class Data(TypedDict):
-    artifact_id: str
-    old_version: str
-    old_time: int
-    old_depend_version: str
-    new_version: str
-    new_time: int
-    new_depend_version: str
-    gap: int
-    release_frequency: int
-
-
-ONE_DAY = 24 * 60 * 60 * 1000
-
-SOURCE_FILE_PATH = Path("output/A_Data_Preparation_and_Extraction/data_updates.json")
+from .lib.constants import ONE_DAY
+from .lib.files import load_source_file, save_plot
+from .lib.type import Data
 
 
 def main() -> None:
+    # Clear any existing plot
     plt.clf()
 
-    try:
-        results: list[Data] = load_json(SOURCE_FILE_PATH)
-    except FileNotFoundError:
-        raise FileNotFoundError(
-            f"File '{SOURCE_FILE_PATH}' not found.\nYou must run 'uv run data_preparation_and_extraction' first."
-        )
+    # Load release transition data
+    results: list[Data] = load_source_file()
 
     # Extract data where the major version has been updated
     major_version_updates = [
@@ -53,18 +43,15 @@ def main() -> None:
         r for r in same_major_versions if r not in minor_version_updates
     ]
 
+    # Convert gaps to days and sort
     major_version_gaps = [r["gap"] / ONE_DAY for r in major_version_updates]
     minor_version_gaps = [r["gap"] / ONE_DAY for r in minor_version_updates]
     patch_version_gaps = [r["gap"] / ONE_DAY for r in patch_version_updates]
 
+    # Plot boxplot (with outliers)
     major_version_gaps.sort()
     minor_version_gaps.sort()
     patch_version_gaps.sort()
-
-    output_path = Path("output")
-    output_path.mkdir(exist_ok=True)
-
-    plt.rc("pdf", fonttype=42)
 
     # Create a box plot of the gaps (with outliers)
     plt.boxplot(
@@ -74,8 +61,9 @@ def main() -> None:
     plt.ylabel(
         "Number of days from publication until packages\nusing log4j 2.17.0 have been updated"
     )
-    plt.savefig(output_path / "rq2_2.pdf")
+    save_plot("rq2_2.pdf")
 
+    # Clear any existing plot
     plt.clf()
 
     # Create a box plot of the gaps (without outliers)
@@ -88,12 +76,14 @@ def main() -> None:
     plt.ylabel(
         "Number of days from publication until packages\nusing log4j 2.17.0 have been updated"
     )
-    plt.savefig(output_path / "rq2_2_no_outlier.pdf")
+    save_plot("rq2_2_no_outlier.pdf")
 
+    # Calculate medians (middle element from sorted list)
     major_version_median = major_version_gaps[len(major_version_gaps) // 2]
     minor_version_median = minor_version_gaps[len(minor_version_gaps) // 2]
     patch_version_median = patch_version_gaps[len(patch_version_gaps) // 2]
 
+    # Output statistics
     print(f"Total packages       : {len(results)}")
     print(
         f"Major version updated: {len(major_version_updates)} (Median: {major_version_median:.0f})"

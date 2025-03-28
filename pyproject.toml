@@ -26,8 +26,6 @@ rq1   = "msr2025.B_Empirical_Study.rq1:main"
 rq2_1 = "msr2025.B_Empirical_Study.rq2_1:main"
 rq2_2 = "msr2025.B_Empirical_Study.rq2_2:main"
 
-
-
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"

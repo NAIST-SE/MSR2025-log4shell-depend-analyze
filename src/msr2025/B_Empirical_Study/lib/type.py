@@ -21,3 +21,4 @@ class Data(TypedDict):
     new_time: int
     new_depend_version: str
     gap: int
+    release_frequency: float

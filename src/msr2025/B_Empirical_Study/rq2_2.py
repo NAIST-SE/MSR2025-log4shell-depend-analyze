@@ -21,6 +21,8 @@ ONE_DAY = 24 * 60 * 60 * 1000
 
 
 def main() -> None:
+    plt.clf()
+
     source_path = Path("output/A_Data_Preparation_and_Extraction/data_updates.json")
 
     with source_path.open() as f:

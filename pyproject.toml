@@ -1,21 +1,30 @@
 [project]
 name = "MSR2025"
 version = "0.1.0"
-description = "MSR2025"
+description = "A research project for the MSR 2025 Mining Challenge, focusing on the analysis of log4j-core dependency updates using Neo4j and empirical software engineering techniques."
 readme = "README.md"
+license = { file = "LICENSE" }
 authors = [
-    { name = "take0x" }
+    { name = "take0x", email = "tanaka.hidetake.te0@naist.ac.jp" },
+    { name = "Hietan", email = "yamasaki.kazuma.yj9@naist.ac.jp" }
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "dotenv>=0.9.9",
     "matplotlib>=3.9.3",
+    "neo4j>=5.28.1",
+    "requests>=2.32.3",
 ]
 
 [project.scripts]
-generate = "msr2025.generate_data:main"
-rq1 = "msr2025.rq1:main"
-rq2_1 = "msr2025.rq2_1:main"
-rq2_2 = "msr2025.rq2_2:main"
+all = "msr2025:main"
+data_preparation_and_extraction = "msr2025.A_Data_Preparation_and_Extraction:main"
+data_preparation  = "msr2025.A_Data_Preparation_and_Extraction.data_preparation:main"
+data_extraction = "msr2025.A_Data_Preparation_and_Extraction.data_extraction:main"
+empirical_study = "msr2025.B_Empirical_Study:main"
+rq1   = "msr2025.B_Empirical_Study.rq1:main"
+rq2_1 = "msr2025.B_Empirical_Study.rq2_1:main"
+rq2_2 = "msr2025.B_Empirical_Study.rq2_2:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -23,3 +32,9 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/msr2025"]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.15.0",
+    "ruff>=0.11.2",
+]

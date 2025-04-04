@@ -6,10 +6,15 @@ dist/
 wheels/
 *.egg-info
 
+# Envirionment Files
+.env
+.DS_Store
+
 # Virtual environments
 .venv
 
+# Generated Files
 output/
-*.json
 
-.DS_Store
+# IDEA Project Directory
+.idea/

@@ -1,5 +1,4 @@
-"""
-src/msr2025/A_Data_Preparation_and_Extraction/data_extraction.py
+"""src/msr2025/A_Data_Preparation_and_Extraction/data_extraction.py
 
 Processes release timeline data for log4j-core dependencies from JSON input.
 
@@ -9,8 +8,9 @@ and calculates the time gap and release frequency between them.
 """
 
 from pathlib import Path
-from typing import TypedDict
-from ..lib.files import save_json, load_json
+from typing import TypedDict, cast
+
+from ..lib.files import load_json, save_json
 
 
 # Type: Information about a single release
@@ -36,16 +36,14 @@ SAVE_FILE_PATH = Path("./output/A_Data_Preparation_and_Extraction/data_updates.j
 
 
 def main() -> None:
-    """
-    Main function for processing the JSON data and extracting release transitions.
+    """Main function for processing the JSON data and extracting release transitions.
 
     For each artifact, finds the last version depending on log4j before 2.17.0
     and the first version after, computes the time gap and release frequency,
     and outputs the result to a new JSON file.
     """
-
     try:
-        results: Source = load_json(SOURCE_FILE_PATH)
+        results: Source = cast(Source, load_json(SOURCE_FILE_PATH))
     except FileNotFoundError:
         raise FileNotFoundError(
             f"File '{SOURCE_FILE_PATH}' not found.\nYou must run 'uv run data_preparation' first."
@@ -54,8 +52,8 @@ def main() -> None:
     output_list: list[dict] = []
 
     for data in results:
-        artifact_id: str = data[0]
-        releases: list[Release] = data[1]
+        artifact_id: str = cast(str, data[0])
+        releases: list[Release] = cast(list[Release], data[1])
 
         # Split releases based on whether they depend on log4j before or after 2.17.0
         old_releases = [r for r in releases if r["log4j_time"] < LOG4J_TIMESTAMP_2_17_0]
@@ -97,7 +95,7 @@ def main() -> None:
         output_list.append(output)
 
     # Save result to file
-    save_json(output_list, SAVE_FILE_PATH)
+    save_json(cast(dict, output_list), SAVE_FILE_PATH)
     print(f"Extracted data has been saved to: '{SAVE_FILE_PATH}'")
 
 

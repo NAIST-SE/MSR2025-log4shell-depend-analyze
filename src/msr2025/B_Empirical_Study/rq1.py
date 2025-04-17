@@ -1,5 +1,4 @@
-"""
-src/msr2025/B_Empirical_Study/rq1.py
+"""src/msr2025/B_Empirical_Study/rq1.py
 
 RQ1: How promptly do packages integrating Log4j-Core address CVEs?
 

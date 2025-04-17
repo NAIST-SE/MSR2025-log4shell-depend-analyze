@@ -1,5 +1,4 @@
-"""
-src/msr2025/B_Empirical_Study/lib/__init__.py
+"""src/msr2025/B_Empirical_Study/lib/__init__.py
 
 Initializes the empirical study utility library.
 

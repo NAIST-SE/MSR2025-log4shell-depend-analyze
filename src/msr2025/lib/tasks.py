@@ -1,5 +1,4 @@
-"""
-src/msr2025/lib/tasks.py
+"""src/msr2025/lib/tasks.py
 
 Provides simple task execution utilities with CLI spinner animation.
 
@@ -8,14 +7,13 @@ is executing, and shows a completion message when the task is done.
 """
 
 import itertools
+import sys
 import threading
 import time
-import sys
 
 
 def _spinner(label: str, done_event: threading.Event) -> None:
-    """
-    Show a spinner animation in the CLI while a task is running.
+    """Show a spinner animation in the CLI while a task is running.
 
     This function loops through a sequence of spinner characters and displays
     them on the same line until the `done_event` is set.
@@ -23,6 +21,7 @@ def _spinner(label: str, done_event: threading.Event) -> None:
     Args:
         label (str): A label to show alongside the spinner.
         done_event (threading.Event): Event object to indicate task completion.
+
     """
     spinner_cycle = itertools.cycle(["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"])
     while not done_event.is_set():
@@ -35,8 +34,7 @@ def _spinner(label: str, done_event: threading.Event) -> None:
 
 
 def run_task(label: str, task) -> None:
-    """
-    Run a task function with a CLI spinner animation.
+    """Run a task function with a CLI spinner animation.
 
     Starts the spinner in a background thread while executing the given task function.
     When the task is completed, the spinner stops and a success message is printed.
@@ -44,6 +42,7 @@ def run_task(label: str, task) -> None:
     Args:
         label (str): A label to display with the spinner.
         task (Callable): The task function to run.
+
     """
     done_event = threading.Event()
     spinner_thread = threading.Thread(target=_spinner, args=(label, done_event))

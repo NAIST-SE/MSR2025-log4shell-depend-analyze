@@ -1,5 +1,4 @@
-"""
-src/msr2025/B_Empirical_Study/lib/files.py
+"""src/msr2025/B_Empirical_Study/lib/files.py
 
 Provides file-related utilities for the empirical study phase.
 
@@ -9,17 +8,17 @@ Includes:
 """
 
 from pathlib import Path
+from typing import cast
 
 from matplotlib import pyplot as plt
 
+from ...lib import load_json
 from .constants import SOURCE_FILE_PATH
 from .type import Data
-from ...lib import load_json
 
 
 def load_source_file() -> list[Data]:
-    """
-    Load the JSON data file used in the empirical study.
+    """Load the JSON data file used in the empirical study.
 
     This function attempts to load preprocessed data. If the file does not exist,
     it provides a helpful error message suggesting to run the preparation step.
@@ -29,9 +28,10 @@ def load_source_file() -> list[Data]:
 
     Raises:
         FileNotFoundError: If the expected file is not found.
+
     """
     try:
-        return load_json(SOURCE_FILE_PATH)
+        return cast(list[Data], load_json(SOURCE_FILE_PATH))
     except FileNotFoundError:
         raise FileNotFoundError(
             f"File '{SOURCE_FILE_PATH}' not found.\nYou must run 'uv run data_preparation_and_extraction' first."
@@ -41,8 +41,7 @@ def load_source_file() -> list[Data]:
 def save_plot(
     filename: str, output_dir: Path = Path("output/B_Empirical_Study")
 ) -> None:
-    """
-    Save the current matplotlib plot to the specified file.
+    """Save the current matplotlib plot to the specified file.
 
     If the file format is PDF, sets the font type to 42 to ensure
     compatibility with vector graphics tools (e.g., Illustrator).
@@ -53,6 +52,7 @@ def save_plot(
 
     Raises:
         ValueError: If the filename does not include an extension.
+
     """
     if "." not in filename:
         raise ValueError(

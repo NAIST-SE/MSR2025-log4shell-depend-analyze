@@ -1,5 +1,4 @@
-"""
-src/msr2025/B_Empirical_Study/lib/type.py
+"""src/msr2025/B_Empirical_Study/lib/type.py
 
 Defines shared data types used in the empirical study phase.
 

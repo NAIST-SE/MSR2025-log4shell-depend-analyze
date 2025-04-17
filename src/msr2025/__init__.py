@@ -1,5 +1,4 @@
-"""
-src/msr2025/__init__.py
+"""src/msr2025/__init__.py
 
 Main launcher for the MSR 2025 Mining Challenge project.
 

@@ -1,5 +1,4 @@
-"""
-src/msr2025/B_Empirical_Study/rq2_1.py
+"""src/msr2025/B_Empirical_Study/rq2_1.py
 
 RQ2-1: To what extent is release frequency associated with the response time to critical CVEs?
 

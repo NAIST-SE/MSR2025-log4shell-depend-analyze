@@ -1,5 +1,4 @@
-"""
-src/msr2025/B_Empirical_Study/rq2_2.py
+"""src/msr2025/B_Empirical_Study/rq2_2.py
 
 RQ2-2: To what extent do response times to critical CVEs vary across major, minor, and patch versions?
 

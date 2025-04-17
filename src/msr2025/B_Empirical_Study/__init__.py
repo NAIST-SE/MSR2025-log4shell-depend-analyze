@@ -1,5 +1,4 @@
-"""
-src/msr2025/B_Empirical_Study/__init__.py
+"""src/msr2025/B_Empirical_Study/__init__.py
 
 Entry point for executing empirical study scripts.
 

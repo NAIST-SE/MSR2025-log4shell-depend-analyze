@@ -1,5 +1,4 @@
-"""
-lib package for data preparation and extraction utilities.
+"""lib package for data preparation and extraction utilities.
 
 This package includes helpers for environment variable handling and
 Neo4j database interaction.

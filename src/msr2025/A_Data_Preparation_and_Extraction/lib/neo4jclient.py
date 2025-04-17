@@ -52,7 +52,7 @@ class Neo4jClient:
             query (str): The Cypher query string.
 
         Returns:
-            List[Dict[str, Any]]: List of result records.
+            list[dict[str, Any]]: list of result records.
 
         """
         with self.driver.session() as session:
@@ -80,7 +80,7 @@ class Neo4jClient:
             clause_return (Optional[str]): RETURN clause.
 
         Returns:
-            List[Dict[str, Any]]: List of result records.
+            list[dict[str, Any]]: List of result records.
 
         """
         queries: dict[str, str | None] = {

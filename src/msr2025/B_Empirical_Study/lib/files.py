@@ -1,6 +1,4 @@
 """
-src/msr2025/B_Empirical_Study/lib/files.py
-
 Provides file-related utilities for the empirical study phase.
 
 Includes:
@@ -9,12 +7,13 @@ Includes:
 """
 
 from pathlib import Path
+from typing import cast
 
 from matplotlib import pyplot as plt
 
+from ...lib import load_json
 from .constants import SOURCE_FILE_PATH
 from .type import Data
-from ...lib import load_json
 
 
 def load_source_file() -> list[Data]:
@@ -29,17 +28,21 @@ def load_source_file() -> list[Data]:
 
     Raises:
         FileNotFoundError: If the expected file is not found.
+
     """
     try:
-        return load_json(SOURCE_FILE_PATH)
-    except FileNotFoundError:
-        raise FileNotFoundError(
-            f"File '{SOURCE_FILE_PATH}' not found.\nYou must run 'uv run data_preparation_and_extraction' first."
+        return cast("list[Data]", load_json(SOURCE_FILE_PATH))
+    except FileNotFoundError as err:
+        error_message = (
+            f"File '{SOURCE_FILE_PATH}' not found.\n"
+            "You must run 'uv run data_preparation_and_extraction' first."
         )
+        raise FileNotFoundError(error_message) from err
 
 
 def save_plot(
-    filename: str, output_dir: Path = Path("output/B_Empirical_Study")
+    filename: str,
+    output_dir: Path = Path("output/B_Empirical_Study"),
 ) -> None:
     """
     Save the current matplotlib plot to the specified file.
@@ -49,15 +52,15 @@ def save_plot(
 
     Args:
         filename (str): The file name to save the plot to (e.g., 'plot.pdf').
-        output_dir (Path): Directory to save the plot. Defaults to './output/B_Empirical_Study'.
+        output_dir (Path): Path to save plot (default: './output/B_Empirical_Study').
 
     Raises:
         ValueError: If the filename does not include an extension.
+
     """
     if "." not in filename:
-        raise ValueError(
-            "Filename must include a file extension (e.g., '.pdf', '.png')"
-        )
+        error_message = "Filename must include a file extension (e.g., '.pdf', '.png')"
+        raise ValueError(error_message)
 
     output_dir.mkdir(parents=True, exist_ok=True)
 

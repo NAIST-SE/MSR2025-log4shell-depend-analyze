@@ -1,8 +1,5 @@
 """
-src/msr2025/lib/envs.py
-
-This module provides a utility function to load environment variables
-from a .env file and retrieve a specific variable by key.
+Utility to load environment variables from a .env file and retrieve a value by key.
 
 Typical usage example:
 
@@ -30,12 +27,13 @@ def getenv(key: str) -> str:
 
     Raises:
         KeyError: If the specified key is not found in the environment.
-    """
 
+    """
     load_dotenv()
     value = os.getenv(key)
 
     if value is None:
-        raise KeyError(f"Environment variable '{key}' not found.")
+        error_message = f"Environment variable '{key}' not found."
+        raise KeyError(error_message)
 
     return value

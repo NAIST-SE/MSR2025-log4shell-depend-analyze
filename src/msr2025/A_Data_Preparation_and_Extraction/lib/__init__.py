@@ -9,6 +9,6 @@ from .env import get_neo4j_envs
 from .neo4jclient import Neo4jClient
 
 __all__ = [
-    "get_neo4j_envs",
     "Neo4jClient",
+    "get_neo4j_envs",
 ]

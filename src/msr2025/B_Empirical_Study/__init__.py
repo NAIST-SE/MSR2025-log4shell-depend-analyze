@@ -1,6 +1,4 @@
 """
-src/msr2025/B_Empirical_Study/__init__.py
-
 Entry point for executing empirical study scripts.
 
 This module runs:
@@ -12,7 +10,7 @@ This module runs:
 from . import rq1, rq2_1, rq2_2
 
 
-def main():
+def main() -> None:
     """Run all empirical study scripts sequentially."""
     print("\n**** RQ 1 ****")
     rq1.main()

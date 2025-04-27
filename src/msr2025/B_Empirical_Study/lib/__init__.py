@@ -1,6 +1,4 @@
 """
-src/msr2025/B_Empirical_Study/lib/__init__.py
-
 Initializes the empirical study utility library.
 
 This package provides:
@@ -16,7 +14,7 @@ from .type import Data
 __all__ = [
     "ONE_DAY",
     "SOURCE_FILE_PATH",
+    "Data",
     "load_source_file",
     "save_plot",
-    "Data",
 ]

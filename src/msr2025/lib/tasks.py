@@ -1,6 +1,4 @@
 """
-src/msr2025/lib/tasks.py
-
 Provides simple task execution utilities with CLI spinner animation.
 
 Includes a spinner animation that runs in a separate thread while a task function
@@ -8,9 +6,11 @@ is executing, and shows a completion message when the task is done.
 """
 
 import itertools
+import sys
 import threading
 import time
-import sys
+from collections.abc import Callable
+from typing import Any
 
 
 def _spinner(label: str, done_event: threading.Event) -> None:
@@ -23,6 +23,7 @@ def _spinner(label: str, done_event: threading.Event) -> None:
     Args:
         label (str): A label to show alongside the spinner.
         done_event (threading.Event): Event object to indicate task completion.
+
     """
     spinner_cycle = itertools.cycle(["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"])
     while not done_event.is_set():
@@ -34,7 +35,10 @@ def _spinner(label: str, done_event: threading.Event) -> None:
     sys.stdout.flush()
 
 
-def run_task(label: str, task) -> None:
+def run_task(
+    label: str,
+    task: Callable[[], None] | Callable[[], list[dict[str, Any]]],
+) -> None:
     """
     Run a task function with a CLI spinner animation.
 
@@ -44,6 +48,7 @@ def run_task(label: str, task) -> None:
     Args:
         label (str): A label to display with the spinner.
         task (Callable): The task function to run.
+
     """
     done_event = threading.Event()
     spinner_thread = threading.Thread(target=_spinner, args=(label, done_event))

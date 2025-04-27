@@ -1,6 +1,4 @@
 """
-src/msr2025/B_Empirical_Study/lib/constants.py
-
 Defines shared constants for the empirical study phase.
 
 Includes:

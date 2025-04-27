@@ -1,5 +1,4 @@
-"""src/msr2025/lib/tasks.py
-
+"""
 Provides simple task execution utilities with CLI spinner animation.
 
 Includes a spinner animation that runs in a separate thread while a task function
@@ -10,10 +9,13 @@ import itertools
 import sys
 import threading
 import time
+from collections.abc import Callable
+from typing import Any
 
 
 def _spinner(label: str, done_event: threading.Event) -> None:
-    """Show a spinner animation in the CLI while a task is running.
+    """
+    Show a spinner animation in the CLI while a task is running.
 
     This function loops through a sequence of spinner characters and displays
     them on the same line until the `done_event` is set.
@@ -33,8 +35,12 @@ def _spinner(label: str, done_event: threading.Event) -> None:
     sys.stdout.flush()
 
 
-def run_task(label: str, task) -> None:
-    """Run a task function with a CLI spinner animation.
+def run_task(
+    label: str,
+    task: Callable[[], None] | Callable[[], list[dict[str, Any]]],
+) -> None:
+    """
+    Run a task function with a CLI spinner animation.
 
     Starts the spinner in a background thread while executing the given task function.
     When the task is completed, the spinner stops and a success message is printed.

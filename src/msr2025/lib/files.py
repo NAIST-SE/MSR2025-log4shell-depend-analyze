@@ -1,14 +1,12 @@
-"""src/msr2025/lib/files.py
-
-Provides utility functions for file operations such as saving and loading JSON data.
-"""
+"""Utility functions for file operations: saving and loading JSON data."""
 
 import json
 from pathlib import Path
 
 
-def save_json(data: dict, path: Path) -> None:
-    """Save data to a file in JSON format.
+def save_json(data: dict, path: Path) -> None:  # type: ignore[type-arg]
+    """
+    Save data to a file in JSON format.
 
     This function creates any necessary parent directories, and then writes the given
     data to the specified path in JSON format with an indentation of 2 spaces.
@@ -27,13 +25,16 @@ def save_json(data: dict, path: Path) -> None:
         with Path.open(path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
     except OSError as e:
-        raise OSError(f"Failed to save JSON to '{path}': {e}") from e
+        error_message = f"Failed to save JSON to '{path}': {e}"
+        raise OSError(error_message) from e
     except TypeError as e:
-        raise TypeError(f"Data is not JSON serializable: {e}") from e
+        error_message = f"Data is not JSON serializable: {e}"
+        raise TypeError(error_message) from e
 
 
-def load_json(path: Path) -> dict:
-    """Load data from a JSON file.
+def load_json(path: Path) -> dict:  # type: ignore[type-arg]
+    """
+    Load data from a JSON file.
 
     Reads the specified JSON file and returns the parsed Python object.
 
@@ -49,7 +50,8 @@ def load_json(path: Path) -> dict:
 
     """
     if not path.exists():
-        raise FileNotFoundError(f"File not found: '{path}'")
+        error_message = f"File not found: '{path}'"
+        raise FileNotFoundError(error_message)
 
     with Path.open(path) as f:
-        return json.load(f)
+        return json.load(f)  # type: ignore[no-any-return]

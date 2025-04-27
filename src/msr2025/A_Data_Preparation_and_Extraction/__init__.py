@@ -1,5 +1,4 @@
-"""src/msr2025/A_Data_Preparation_and_Extraction/__init__.py
-
+"""
 Combines the data preparation and extraction steps for Neo4j-based analysis.
 
 This module sequentially executes:
@@ -10,7 +9,7 @@ This module sequentially executes:
 from . import data_extraction, data_preparation
 
 
-def main():
+def main() -> None:
     """Run both data preparation and extraction steps in order."""
     print("\n**** Data Preparation ****")
     data_preparation.main()

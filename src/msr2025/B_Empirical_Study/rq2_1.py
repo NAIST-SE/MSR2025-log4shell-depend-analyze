@@ -1,6 +1,8 @@
-"""src/msr2025/B_Empirical_Study/rq2_1.py
+"""
+Run RQ2-1 analysis.
 
-RQ2-1: To what extent is release frequency associated with the response time to critical CVEs?
+RQ2-1: To what extent is release frequency associated
+with the response time to critical CVEs?
 
 This script:
 - Loads the dataset of package updates.
@@ -8,15 +10,20 @@ This script:
 - Computes the Pearson correlation coefficient between the two.
 """
 
+from typing import TYPE_CHECKING
+
 import matplotlib.pyplot as plt
 import numpy as np
 
 from .lib.constants import ONE_DAY
 from .lib.files import load_source_file, save_plot
-from .lib.type import Data
+
+if TYPE_CHECKING:
+    from .lib.type import Data
 
 
 def main() -> None:
+    """Run RQ2-1 analysis."""
     # Clear any existing plot
     plt.clf()
 
@@ -30,7 +37,8 @@ def main() -> None:
     # Plot scatter plot
     plt.scatter(gaps, release_frequencies)
     plt.xlabel(
-        "Number of days from publication until packages using log4j 2.17.0 have been updated"
+        "Number of days from publication until "
+        "packages using log4j 2.17.0 have been updated",
     )
     plt.ylabel("Release frequency (days)")
     plt.xlim(0, 50)

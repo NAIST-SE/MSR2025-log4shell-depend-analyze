@@ -33,11 +33,24 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/msr2025"]
 
+[tool.mypy]
+strict = true
+
 [tool.ruff]
+lint.select = ["ALL"]
 lint.extend-select = [
-    "I",  # isort
+    "I",   # isort
     "PTH", # pathlib
-    "UP", # pyupgrade
+    "UP",  # pyupgrade
+]
+
+lint.ignore = [
+    "D203",   # No blank line before class docstring (confricts with D211)
+    "D212",   # Multi-line docstring summary should start on the first line
+              # (confricts with D213)
+    "COM812", # Trailing comma enforcement (conflict with ruff formatter)
+    "T201",   # Disallow use of print statements
+    "TID252", # Avoid relative imports from parent directories
 ]
 
 [dependency-groups]

@@ -1,5 +1,4 @@
-"""src/msr2025/A_Data_Preparation_and_Extraction/lib/neo4jclient.py
-
+"""
 Provides a Neo4jClient class for interacting with a Neo4j graph database.
 
 This module defines a context-manager-enabled client class for running Cypher queries,
@@ -8,17 +7,31 @@ including support for building dynamic queries and exporting results to JSON.
 
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, Self, cast
 
 from neo4j import GraphDatabase
 
 from ...lib.files import save_json
 
+if TYPE_CHECKING:
+    from pathlib import Path
+    from types import TracebackType
+
 
 class Neo4jClient:
+    """
+    A context-manager-enabled client for interacting with a Neo4j graph database.
+
+    Provides methods to:
+    - Execute raw Cypher queries
+    - Dynamically build queries from individual clauses
+    - Export query results to JSON files
+    Supports usage within a 'with' block to automatically manage connections.
+    """
+
     def __init__(self, uri: str, user: str, password: str) -> None:
-        """Initialize the Neo4j client with connection credentials.
+        """
+        Initialize the Neo4j client with connection credentials.
 
         Args:
            uri (str): The URI of the Neo4j database.
@@ -28,8 +41,9 @@ class Neo4jClient:
         """
         self.driver = GraphDatabase.driver(uri, auth=(user, password))
 
-    def __enter__(self) -> Neo4jClient:
-        """Enter the runtime context for use with 'with' statements.
+    def __enter__(self) -> Self:
+        """
+        Enter the runtime context for use with 'with' statements.
 
         Returns:
             Neo4jClient: The initialized client instance.
@@ -37,7 +51,12 @@ class Neo4jClient:
         """
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         """Exit the runtime context and close the database connection."""
         self.close()
 
@@ -45,8 +64,9 @@ class Neo4jClient:
         """Close the Neo4j database connection."""
         self.driver.close()
 
-    def run_query(self, query) -> list[dict[str, Any]]:
-        """Run a raw Cypher query and return the results.
+    def run_query(self, query: str) -> list[dict[str, Any]]:
+        """
+        Run a raw Cypher query and return the results.
 
         Args:
             query (str): The Cypher query string.
@@ -57,7 +77,7 @@ class Neo4jClient:
         """
         with self.driver.session() as session:
             result = session.run(query)
-            return cast(list[dict[str, Any]], [record for record in result])
+            return cast("list[dict[str, Any]]", list(result))
 
     def run_query_with_clauses(
         self,
@@ -67,7 +87,8 @@ class Neo4jClient:
         clause_create: str | None = None,
         clause_return: str | None = None,
     ) -> list[dict[str, Any]]:
-        """Construct and run a Cypher query from individual clauses.
+        """
+        Construct and run a Cypher query from individual clauses.
 
         Any clause (MATCH, WHERE, SET, CREATE, RETURN) can be optionally provided.
         The query will be dynamically built and executed.
@@ -95,7 +116,8 @@ class Neo4jClient:
         return self.run_query(query)
 
     def extract_data(self, query: str, path: Path) -> None:
-        """Run a query and export the results to a JSON file.
+        """
+        Run a query and export the results to a JSON file.
 
         Args:
             query (str): The Cypher query to run.
@@ -103,4 +125,4 @@ class Neo4jClient:
 
         """
         result = self.run_query(query)
-        save_json(cast(dict, [record for record in result]), path)
+        save_json(cast("dict", list(result)), path)  # type: ignore[type-arg]

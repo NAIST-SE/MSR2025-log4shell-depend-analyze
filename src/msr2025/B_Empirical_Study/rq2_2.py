@@ -1,6 +1,8 @@
-"""src/msr2025/B_Empirical_Study/rq2_2.py
+"""
+Run RQ2-2 analysis.
 
-RQ2-2: To what extent do response times to critical CVEs vary across major, minor, and patch versions?
+RQ2-2: To what extent do response times to
+critical CVEs vary across major, minor, and patch versions?
 
 This script:
 - Classifies updates into major, minor, and patch version changes.
@@ -8,14 +10,19 @@ This script:
 - Computes and prints the median delay for each type of version update.
 """
 
+from typing import TYPE_CHECKING
+
 import matplotlib.pyplot as plt
 
 from .lib.constants import ONE_DAY
 from .lib.files import load_source_file, save_plot
-from .lib.type import Data
+
+if TYPE_CHECKING:
+    from .lib.type import Data
 
 
 def main() -> None:
+    """Run RQ2-2 analysis."""
     # Clear any existing plot
     plt.clf()
 
@@ -54,11 +61,13 @@ def main() -> None:
 
     # Create a box plot of the gaps (with outliers)
     plt.boxplot(
-        [major_version_gaps, minor_version_gaps, patch_version_gaps], showmeans=True
+        [major_version_gaps, minor_version_gaps, patch_version_gaps],
+        showmeans=True,
     )
     plt.xticks([1, 2, 3], ["Major", "Minor", "Patch"])
     plt.ylabel(
-        "Number of days from publication until packages\nusing log4j 2.17.0 have been updated"
+        "Number of days from publication until packages\n"
+        "using log4j 2.17.0 have been updated",
     )
     save_plot("rq2_2.pdf")
 
@@ -73,7 +82,8 @@ def main() -> None:
     )
     plt.xticks([1, 2, 3], ["Major", "Minor", "Patch"])
     plt.ylabel(
-        "Number of days from publication until packages\nusing log4j 2.17.0 have been updated"
+        "Number of days from publication until packages\n"
+        "using log4j 2.17.0 have been updated",
     )
     save_plot("rq2_2_no_outlier.pdf")
 
@@ -85,13 +95,16 @@ def main() -> None:
     # Output statistics
     print(f"Total packages       : {len(results)}")
     print(
-        f"Major version updated: {len(major_version_updates)} (Median: {major_version_median:.0f})"
+        f"Major version updated: {len(major_version_updates)} "
+        f"(Median: {major_version_median:.0f})",
     )
     print(
-        f"Minor version updated: {len(minor_version_updates)} (Median: {minor_version_median:.0f})"
+        f"Minor version updated: {len(minor_version_updates)} "
+        f"(Median: {minor_version_median:.0f})",
     )
     print(
-        f"Patch version updated: {len(patch_version_updates)} (Median: {patch_version_median:.0f})"
+        f"Patch version updated: {len(patch_version_updates)} "
+        f"(Median: {patch_version_median:.0f})",
     )
 
 

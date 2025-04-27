@@ -61,12 +61,12 @@ def main() -> None:
 
     # Create a box plot of the gaps (with outliers)
     plt.boxplot(
-        [major_version_gaps, minor_version_gaps, patch_version_gaps], showmeans=True
+        [major_version_gaps, minor_version_gaps, patch_version_gaps], showmeans=True,
     )
     plt.xticks([1, 2, 3], ["Major", "Minor", "Patch"])
     plt.ylabel(
         "Number of days from publication until packages\n"
-        "using log4j 2.17.0 have been updated"
+        "using log4j 2.17.0 have been updated",
     )
     save_plot("rq2_2.pdf")
 
@@ -82,7 +82,7 @@ def main() -> None:
     plt.xticks([1, 2, 3], ["Major", "Minor", "Patch"])
     plt.ylabel(
         "Number of days from publication until packages\n"
-        "using log4j 2.17.0 have been updated"
+        "using log4j 2.17.0 have been updated",
     )
     save_plot("rq2_2_no_outlier.pdf")
 
@@ -95,15 +95,15 @@ def main() -> None:
     print(f"Total packages       : {len(results)}")
     print(
         f"Major version updated: {len(major_version_updates)} "
-        f"(Median: {major_version_median:.0f})"
+        f"(Median: {major_version_median:.0f})",
     )
     print(
         f"Minor version updated: {len(minor_version_updates)} "
-        f"(Median: {minor_version_median:.0f})"
+        f"(Median: {minor_version_median:.0f})",
     )
     print(
         f"Patch version updated: {len(patch_version_updates)} "
-        f"(Median: {patch_version_median:.0f})"
+        f"(Median: {patch_version_median:.0f})",
     )
 
 

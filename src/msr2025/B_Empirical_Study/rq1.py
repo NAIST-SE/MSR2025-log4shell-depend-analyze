@@ -33,7 +33,7 @@ def main() -> None:
     plt.hist(gaps, bins=100)
     plt.xlabel(
         "Number of days from publication until packages"
-        "using log4j 2.17.0 have been updated"
+        "using log4j 2.17.0 have been updated",
     )
     plt.ylabel("Number of packages")
 
@@ -55,7 +55,7 @@ def main() -> None:
         f"% of packages updated in 3 months: "
         f"{packages_updated_within_three_months / total_packages:.2%}\n"
         f"% of packages updated in a year  : "
-        f"{packages_updated_within_a_year / total_packages:.2%}"
+        f"{packages_updated_within_a_year / total_packages:.2%}",
     )
 
 

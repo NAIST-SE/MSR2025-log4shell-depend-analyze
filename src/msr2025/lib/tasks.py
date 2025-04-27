@@ -36,7 +36,7 @@ def _spinner(label: str, done_event: threading.Event) -> None:
 
 
 def run_task(
-    label: str, task: Callable[[], None] | Callable[[], list[dict[str, Any]]]
+    label: str, task: Callable[[], None] | Callable[[], list[dict[str, Any]]],
 ) -> None:
     """
     Run a task function with a CLI spinner animation.

@@ -38,7 +38,7 @@ def main() -> None:
     plt.scatter(gaps, release_frequencies)
     plt.xlabel(
         "Number of days from publication until"
-        "packages using log4j 2.17.0 have been updated"
+        "packages using log4j 2.17.0 have been updated",
     )
     plt.ylabel("Release frequency (days)")
     plt.xlim(0, 50)

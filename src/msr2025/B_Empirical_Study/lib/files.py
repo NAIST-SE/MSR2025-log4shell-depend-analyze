@@ -41,7 +41,7 @@ def load_source_file() -> list[Data]:
 
 
 def save_plot(
-    filename: str, output_dir: Path = Path("output/B_Empirical_Study")
+    filename: str, output_dir: Path = Path("output/B_Empirical_Study"),
 ) -> None:
     """
     Save the current matplotlib plot to the specified file.

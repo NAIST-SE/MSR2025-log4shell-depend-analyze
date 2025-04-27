@@ -9,7 +9,7 @@ This script:
 - Plots a scatter graph showing update delay vs. release frequency.
 - Computes the Pearson correlation coefficient between the two.
 """
-
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import matplotlib.pyplot as plt
@@ -21,6 +21,8 @@ from .lib.files import load_source_file, save_plot
 if TYPE_CHECKING:
     from .lib.type import Data
 
+SAVE_FILE_NAME="rq2_1.pdf"
+SAVE_FILE_PATH=Path(f"output/B_Empirical_Study/{SAVE_FILE_NAME}")
 
 def main() -> None:
     """Run RQ2-1 analysis."""
@@ -45,12 +47,13 @@ def main() -> None:
     plt.ylim(0, 100)
 
     # Save the plot
-    save_plot("rq2_1.pdf")
+    save_plot(SAVE_FILE_NAME)
 
     # Calculate and print the Pearson correlation coefficient
     correlation = np.corrcoef(gaps, release_frequencies)[0, 1]
     print(f"Correlation: {correlation:.2f}")
 
+    print(f"Plot has been saved to: '{SAVE_FILE_PATH}'")
 
 if __name__ == "__main__":
     main()

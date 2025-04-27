@@ -9,7 +9,7 @@ This script:
 - Draws box plots of update delays for each category (with and without outliers).
 - Computes and prints the median delay for each type of version update.
 """
-
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import matplotlib.pyplot as plt
@@ -20,6 +20,11 @@ from .lib.files import load_source_file, save_plot
 if TYPE_CHECKING:
     from .lib.type import Data
 
+SAVE_FILE_NAME="rq2_2.pdf"
+SAVE_FILE_PATH=Path(f"output/B_Empirical_Study/{SAVE_FILE_NAME}")
+
+SAVE_fILE_NAME_NO_OUTLIER="rq2_2_no_outlier.pdf"
+SAVE_FILE_PATH_NO_OUTLIER=Path(f"output/B_Empirical_Study/{SAVE_fILE_NAME_NO_OUTLIER}")
 
 def main() -> None:
     """Run RQ2-2 analysis."""
@@ -69,7 +74,7 @@ def main() -> None:
         "Number of days from publication until packages\n"
         "using log4j 2.17.0 have been updated",
     )
-    save_plot("rq2_2.pdf")
+    save_plot(SAVE_FILE_NAME)
 
     # Clear any existing plot
     plt.clf()
@@ -85,7 +90,7 @@ def main() -> None:
         "Number of days from publication until packages\n"
         "using log4j 2.17.0 have been updated",
     )
-    save_plot("rq2_2_no_outlier.pdf")
+    save_plot(SAVE_fILE_NAME_NO_OUTLIER)
 
     # Calculate medians (middle element from sorted list)
     major_version_median = major_version_gaps[len(major_version_gaps) // 2]
@@ -106,6 +111,9 @@ def main() -> None:
         f"Patch version updated: {len(patch_version_updates)} "
         f"(Median: {patch_version_median:.0f})",
     )
+
+    print(f"Plot has been saved to: '{SAVE_FILE_PATH}'")
+    print(f"Plot has been saved to: '{SAVE_FILE_PATH_NO_OUTLIER}'")
 
 
 if __name__ == "__main__":

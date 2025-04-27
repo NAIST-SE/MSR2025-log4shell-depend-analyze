@@ -8,7 +8,7 @@ This script:
 - Plots a histogram of days packages took to update after log4j 2.17.0.
 - Calculates and prints the percentage of packages updated within 3 months and 1 year.
 """
-
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import matplotlib.pyplot as plt
@@ -19,6 +19,8 @@ from .lib.files import load_source_file, save_plot
 if TYPE_CHECKING:
     from .lib.type import Data
 
+SAVE_FILE_NAME="rq1.pdf"
+SAVE_FILE_PATH=Path(f"output/B_Empirical_Study/{SAVE_FILE_NAME}")
 
 def main() -> None:
     """Run RQ2-1 analysis."""
@@ -57,6 +59,8 @@ def main() -> None:
         f"% of packages updated in a year  : "
         f"{packages_updated_within_a_year / total_packages:.2%}",
     )
+
+    print(f"Plot has been saved to: '{SAVE_FILE_PATH}'")
 
 
 if __name__ == "__main__":

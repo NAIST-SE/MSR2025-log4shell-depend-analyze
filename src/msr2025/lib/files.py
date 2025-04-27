@@ -6,7 +6,8 @@ Provides utility functions for file operations such as saving and loading JSON d
 import json
 from pathlib import Path
 
-def save_json(data: dict, path: Path) -> None: # type: ignore
+
+def save_json(data: dict, path: Path) -> None:  # type: ignore
     """Save data to a file in JSON format.
 
     This function creates any necessary parent directories, and then writes the given
@@ -51,4 +52,4 @@ def load_json(path: Path) -> dict:  # type: ignore
         raise FileNotFoundError(f"File not found: '{path}'")
 
     with Path.open(path) as f:
-        return json.load(f) # type: ignore
+        return json.load(f)  # type: ignore

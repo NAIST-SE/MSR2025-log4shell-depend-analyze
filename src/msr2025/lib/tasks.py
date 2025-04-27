@@ -34,7 +34,9 @@ def _spinner(label: str, done_event: threading.Event) -> None:
     sys.stdout.flush()
 
 
-def run_task(label: str, task: Callable[[], None] | Callable[[], list[dict[str, Any]]]) -> None:
+def run_task(
+    label: str, task: Callable[[], None] | Callable[[], list[dict[str, Any]]]
+) -> None:
     """Run a task function with a CLI spinner animation.
 
     Starts the spinner in a background thread while executing the given task function.

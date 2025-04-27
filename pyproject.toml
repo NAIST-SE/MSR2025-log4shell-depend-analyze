@@ -37,13 +37,14 @@ packages = ["src/msr2025"]
 strict = true
 
 [tool.ruff]
-select = ["ALL"]
+lint.select = ["ALL"]
 lint.extend-select = [
     "I",  # isort
     "PTH", # pathlib
     "UP", # pyupgrade
 ]
-ignore = ["D203", "D212", "COM812"]
+lint.ignore = ["D203", "D212", "COM812"]
+
 
 [dependency-groups]
 dev = [

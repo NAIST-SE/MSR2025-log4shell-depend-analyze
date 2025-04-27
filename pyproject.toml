@@ -33,12 +33,17 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/msr2025"]
 
+[tool.mypy]
+strict = true
+
 [tool.ruff]
+select = ["ALL"]
 lint.extend-select = [
     "I",  # isort
     "PTH", # pathlib
     "UP", # pyupgrade
 ]
+ignore = ["D203", "D212", "COM812"]
 
 [dependency-groups]
 dev = [

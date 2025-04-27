@@ -61,7 +61,8 @@ def main() -> None:
 
     # Create a box plot of the gaps (with outliers)
     plt.boxplot(
-        [major_version_gaps, minor_version_gaps, patch_version_gaps], showmeans=True,
+        [major_version_gaps, minor_version_gaps, patch_version_gaps],
+        showmeans=True,
     )
     plt.xticks([1, 2, 3], ["Major", "Minor", "Patch"])
     plt.ylabel(

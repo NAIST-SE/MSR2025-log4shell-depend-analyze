@@ -32,7 +32,7 @@ def main() -> None:
     gaps = [r["gap"] / ONE_DAY for r in results]
     plt.hist(gaps, bins=100)
     plt.xlabel(
-        "Number of days from publication until packages"
+        "Number of days from publication until packages "
         "using log4j 2.17.0 have been updated",
     )
     plt.ylabel("Number of packages")

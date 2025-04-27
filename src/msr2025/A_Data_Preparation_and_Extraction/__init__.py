@@ -1,5 +1,4 @@
-"""src/msr2025/A_Data_Preparation_and_Extraction/__init__.py
-
+"""
 Combines the data preparation and extraction steps for Neo4j-based analysis.
 
 This module sequentially executes:

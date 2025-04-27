@@ -10,7 +10,7 @@ This script sequentially runs:
 from . import A_Data_Preparation_and_Extraction, B_Empirical_Study
 
 
-def main():
+def main() -> None:
     print("\n========================================")
     print(" Step 1: Data Preparation & Extraction ")
     print("========================================")

@@ -49,7 +49,7 @@ def main() -> None:
             f"File '{SOURCE_FILE_PATH}' not found.\nYou must run 'uv run data_preparation' first."
         )
 
-    output_list: list[dict] = []
+    output_list: list[dict[str, int | str | float | object]] = []
 
     for data in results:
         artifact_id: str = cast(str, data[0])
@@ -95,7 +95,7 @@ def main() -> None:
         output_list.append(output)
 
     # Save result to file
-    save_json(cast(dict, output_list), SAVE_FILE_PATH)
+    save_json(cast(dict, output_list), SAVE_FILE_PATH) # type: ignore
     print(f"Extracted data has been saved to: '{SAVE_FILE_PATH}'")
 
 

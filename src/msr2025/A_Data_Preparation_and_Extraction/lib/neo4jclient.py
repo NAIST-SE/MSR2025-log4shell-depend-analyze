@@ -9,7 +9,8 @@ including support for building dynamic queries and exporting results to JSON.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, cast
+from types import TracebackType
+from typing import Any, cast, Optional, Type
 
 from neo4j import GraphDatabase
 
@@ -37,7 +38,12 @@ class Neo4jClient:
         """
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(
+            self,
+            exc_type: Optional[Type[BaseException]],
+            exc_val: Optional[BaseException],
+            exc_tb: Optional[TracebackType]
+    ) -> None:
         """Exit the runtime context and close the database connection."""
         self.close()
 
@@ -45,7 +51,7 @@ class Neo4jClient:
         """Close the Neo4j database connection."""
         self.driver.close()
 
-    def run_query(self, query) -> list[dict[str, Any]]:
+    def run_query(self, query: str) -> list[dict[str, Any]]:
         """Run a raw Cypher query and return the results.
 
         Args:
@@ -103,4 +109,4 @@ class Neo4jClient:
 
         """
         result = self.run_query(query)
-        save_json(cast(dict, [record for record in result]), path)
+        save_json(cast(dict, [record for record in result]), path)  # type: ignore

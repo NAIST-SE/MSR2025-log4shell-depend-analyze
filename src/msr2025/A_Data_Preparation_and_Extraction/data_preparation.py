@@ -19,7 +19,7 @@ SEMVER_REGEX = "'^\\\\d+\\\\.\\\\d+\\\\.\\\\d+$'"
 SAVE_FILE_PATH = Path("./output/A_Data_Preparation_and_Extraction/data_releases.json")
 
 
-def main():
+def main() -> None:
     """Entry point of the script. Connects to the Neo4j database, processes and labels
     release and artifact nodes related to 'log4j-core', and extracts structured data.
     """

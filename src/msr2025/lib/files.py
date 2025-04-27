@@ -6,8 +6,7 @@ Provides utility functions for file operations such as saving and loading JSON d
 import json
 from pathlib import Path
 
-
-def save_json(data: dict, path: Path) -> None:
+def save_json(data: dict, path: Path) -> None: # type: ignore
     """Save data to a file in JSON format.
 
     This function creates any necessary parent directories, and then writes the given
@@ -32,7 +31,7 @@ def save_json(data: dict, path: Path) -> None:
         raise TypeError(f"Data is not JSON serializable: {e}") from e
 
 
-def load_json(path: Path) -> dict:
+def load_json(path: Path) -> dict:  # type: ignore
     """Load data from a JSON file.
 
     Reads the specified JSON file and returns the parsed Python object.
@@ -52,4 +51,4 @@ def load_json(path: Path) -> dict:
         raise FileNotFoundError(f"File not found: '{path}'")
 
     with Path.open(path) as f:
-        return json.load(f)
+        return json.load(f) # type: ignore
